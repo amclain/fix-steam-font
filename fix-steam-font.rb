@@ -1,5 +1,8 @@
 # Fixes the Steam chat window font size.
 #
+# Steam Style File:
+# Steam\resource\styles\steam.styles
+#
 # The Problem:
 # http://gaming.stackexchange.com/questions/116537/how-do-i-adjust-steam-chat-font-sizes
 
