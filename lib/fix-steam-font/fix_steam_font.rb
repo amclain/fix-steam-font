@@ -39,8 +39,8 @@ class FixSteamFont
           exit
         end
         
-        File.open(@path.config_path, 'w') {|file| file << "steam: #{user_path.strip}"}
-        raise StandardError, 'Could not write config file.' unless File.exists? @path.config_path
+        @path.save user_path.strip
+        raise StandardError, 'Could not write config file.' unless @path.exists?
         
         @path.load
       end
