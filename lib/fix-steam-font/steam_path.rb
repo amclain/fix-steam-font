@@ -2,6 +2,7 @@ require 'yaml'
 
 # Represents a path to the Steam installation.
 class SteamPath
+  attr_reader :config_path
   
   def initialize
     @path = nil
@@ -10,6 +11,14 @@ class SteamPath
   
   def to_s
     @path.to_s
+  end
+  
+  def empty?
+    @path.to_s.empty?
+  end
+  
+  def exists?
+    File.exists? @path
   end
   
   # Load path from configuration file.

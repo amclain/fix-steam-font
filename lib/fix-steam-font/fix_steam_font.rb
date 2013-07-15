@@ -1,3 +1,5 @@
+require 'fix-steam-font/steam_path'
+
 class FixSteamFont
   class << self
     def run
@@ -17,7 +19,39 @@ class FixSteamFont
         'friends_chat_securitylink'
         ]
       
-      styles = File.open('steam.styles').read
+      # Load configuration.
+      @path = SteamPath.new
+      
+      begin
+        @path.load
+      rescue Errno::ENOENT => e
+        # Config file doesn't exist.
+        # Do not implement - user will be prompted for path.
+      end
+      
+      # Prompt user for path to Steam.
+      if @path.empty?
+        puts "Enter path to Steam:"
+        user_path = gets
+        
+        if user_path.strip.empty?
+          puts 'Aborted.'
+          exit
+        end
+        
+        File.open(@path.config_path, 'w') {|file| file << "steam: #{user_path.strip}"}
+        raise StandardError, 'Could not write config file.' unless File.exists? @path.config_path
+        
+        @path.load
+      end
+      
+      # Load Steam style.
+      styles_path = "#{@path}/resource/styles/steam.styles"
+      
+      raise StandardError, "Could not find steam.styles at:\n#{styles_path}" \
+        unless File.exists? styles_path
+      
+      styles = File.open(styles_path).read
       
       new_styles = ''
       processing_section = false
@@ -53,7 +87,7 @@ class FixSteamFont
       end
       
       # Save the changes.
-      File.open('steam.styles', 'w') do |file|
+      File.open(styles_path, 'w') do |file|
         new_styles.each_line {|line| file << line}
       end
       

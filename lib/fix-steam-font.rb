@@ -1,1 +1,1 @@
-require 'fix-steam-font/fix-steam-font'
+require 'fix-steam-font/fix_steam_font'
